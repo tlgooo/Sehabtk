@@ -1,116 +1,116 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>امتلك سحابتك - 10 جنيه بس</title>
+<title>ادخل قصرك في السما</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-body{font-family:tahoma;background:linear-gradient(#87CEEB,#E0F6FF);text-align:center;padding:30px;margin:0}
-h1{color:#1a5490}
-.cloud{font-size:100px;margin:15px;cursor:pointer;border:3px solid transparent;padding:15px;border-radius:20px;transition:0.3s;display:inline-block}
-.cloud.selected{border-color:gold;background:rgba(255,215,0,0.3);transform:scale(1.15)}
-#certificate{width:90%;max-width:600px;margin:30px auto;background:white;padding:40px 20px;border-radius:20px;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-button{background:linear-gradient(gold,orange);border:none;padding:18px 40px;font-size:20px;border-radius:15px;cursor:pointer;font-weight:bold;margin:10px;display:block;width:80%;max-width:350px;margin:15px auto}
-#musicBtn{background:linear-gradient(#9b59b6,#8e44ad);color:white;font-size:16px;padding:12px}
-#payBtn{background:linear-gradient(#25D366,#128C7E);color:white}
-#downloadBtn{background:linear-gradient(#1a5490,#87CEEB);color:white;display:none}
-input{padding:15px;font-size:20px;width:80%;max-width:300px;border-radius:10px;border:2px solid #87CEEB;text-align:center}
+body{margin:0;font-family:tahoma;background:#000;overflow:hidden}
+#gate{position:fixed;width:100%;height:100%;background:radial-gradient(circle, #1a1a2e, #000);display:flex;flex-direction:column;justify-content:center;align-items:center}
+.door{width:180px;height:320px;margin:15px;cursor:pointer;transition:0.8s;position:relative;display:inline-block}
+.door img{width:100%;height:100%;border-radius:100px 100px 10px 10px;box-shadow:0 0 30px gold}
+.door:hover{transform:scale(1.1) translateY(-10px)}
+.door.open{transform:rotateY(-70deg);transform-origin:left}
+input{padding:12px;font-size:18px;border-radius:10px;border:2px solid gold;text-align:center;margin:20px;width:250px;background:rgba(0,0,0,0.5);color:gold}
+#scene{display:none;width:100%;height:100vh;position:relative}
+.scene-bg{width:100%;height:100%;background-size:cover;background-position:center;transition:2s}
+.text{position:absolute;top:60%;left:50%;transform:translate(-50%,-50%);color:white;font-size:26px;text-shadow:3px 3px 15px black;text-align:center;background:rgba(0,0,0,0.4);padding:20px;border-radius:15px}
+#certificate{display:none;padding:40px;text-align:center;background:linear-gradient(135deg,#fff,#f0e68c);color:black;border-radius:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px gold;max-width:500px}
+button{background:linear-gradient(gold,orange);border:none;padding:15px 35px;font-size:18px;border-radius:12px;cursor:pointer;font-weight:bold;margin-top:20px}
 </style>
 </head>
 <body>
 
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_d1718a8f9e.mp3" type="audio/mpeg">
-</audio>
-<audio id="dingSound">
-  <source src="https://cdn.pixabay.com/audio/2022/03/24/audio_d1718a8f9e.mp3" type="audio/mpeg">
-</audio>
+<audio id="openSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
+<audio id="bgSound" loop src="https://cdn.pixabay.com/audio/2022/03/24/audio_d1718a8f9e.mp3"></audio>
+<audio id="dingSound" src="https://cdn.pixabay.com/audio/2022/03/10/audio_d1718a8f9e.mp3"></audio>
 
-<h1>☁️ امتلك سحابتك بـ 10 جنيه بس ☁️</h1>
-<button id="musicBtn" onclick="playMusic()">🎵 دوس هنا عشان الموسيقى تشتغل</button>
-
-<div>
-  <span class="cloud" onclick="selectCloud('☁️', this)">☁️</span>
-  <span class="cloud" onclick="selectCloud('🌩️', this)">🌩️</span>
-  <span class="cloud" onclick="selectCloud('🌈', this)">🌈</span>
-  <span class="cloud" onclick="selectCloud('⛅', this)">⛅</span>
-  <span class="cloud" onclick="selectCloud('❄️', this)">❄️</span>
+<div id="gate">
+  <h1 style="color:gold;font-size:32px;margin-bottom:20px">اختر بوابة قصرك السماوي</h1>
+  <input id="playerName" placeholder="اكتب اسم الملك/الملكة هنا">
+  <div>
+    <div class="door" onclick="openGate('gold')">
+      <img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?q=80&w=500" alt="باب دهبي">
+      <p style="color:gold;text-align:center;font-size:18px">الباب الذهبي</p>
+    </div>
+    <div class="door" onclick="openGate('silver')">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=500" alt="باب سيلفر">
+      <p style="color:silver;text-align:center;font-size:18px">الباب الفضي</p>
+    </div>
+  </div>
 </div>
 
-<br>
-<input id="name" placeholder="اكتب اسمك هنا">
-<br>
-<button id="payBtn" onclick="pay()">1. ادفع 10ج واتساب 01282175854</button>
-<button id="downloadBtn" onclick="download()">2. نزل شهادتك بعد الدفع</button>
+<div id="scene">
+  <div class="scene-bg" id="bg"></div>
+  <div class="text" id="txt">مرحباً في مملكتك...</div>
+</div>
 
 <div id="certificate">
-  <h2>☁️ شهادة ملكية سحابة افتراضية ☁️</h2>
-  <div id="cloudShow" style="font-size:130px;margin:20px">☁️</div>
-  <h3>هذه السحابة ملك للاستاذ/ة <span id="nameShow" style="color:#1a5490"></span></h3>
-  <p style="font-size:20px">رقم السحابة: #SC-<span id="num"></span></p>
-  <p style="font-size:12px;color:gray">تم الشراء بتاريخ: <span id="date"></span></p>
+  <h2>👑 شهادة ملكية القصر السماوي 👑</h2>
+  <p style="font-size:20px">تشهد السماء أن القصر رقم <span id="num" style="color:#b8860b;font-weight:bold"></span></p>
+  <p style="font-size:24px">ملك للملك/الملكة: <span id="nameShow" style="color:#b8860b;font-weight:bold"></span></p>
+  <p style="font-size:16px;color:gray">تاريخ التتويج: <span id="date"></span></p>
+  <button onclick="download()">📜 نزل شهادة التتويج</button>
 </div>
 
 <script>
-let selectedCloud = '☁️';
-let customerName = '';
-let cloudNum = 0;
-let paid = false;
+let step = 0;
+let palaceNum = Math.floor(Math.random()*9000)+1000;
+let playerName = '';
 
-function playMusic(){
-  document.getElementById('bgMusic').play().then(()=>{
-    document.getElementById('musicBtn').innerText = '🔊 الموسيقى شغالة';
-    document.getElementById('musicBtn').disabled = true;
-  }).catch(()=>{
-    alert('دوس الزرار مرة كمان الموسيقى هتشتغل');
-  });
+const scenes = [
+  {img:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200', text:'أهلاً بيك في حدائق قصرك... انهار من نور بتجري حواليك ✨'},
+  {img:'https://images.unsplash.com/photo-1571896349842-33c89424b7d0?q=80&w=1200', text:'وهنا بهو القصر... اعمدة من كريستال وسقف مرصع بالنجوم 💎'},
+  {img:'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200', text:'دي اوضة العرش... كرسيك الذهبي مستنيك من آلاف السنين 👑'},
+  {img:'', text:'مبروك يا ' + playerName + '! بقيت رسمياً مالك القصر السماوي'}
+];
+
+function openGate(type){
+  playerName = document.getElementById('playerName').value.trim();
+  if(!playerName){
+    alert('اكتب اسمك الأول يا ملك 👑');
+    return;
+  }
+
+  document.querySelectorAll('.door').forEach(d=>d.classList.add('open'));
+  document.getElementById('openSound').play();
+  document.getElementById('bgSound').play();
+
+  setTimeout(()=>{
+    document.getElementById('gate').style.display='none';
+    document.getElementById('scene').style.display='block';
+    nextScene();
+  }, 1500);
 }
 
-function selectCloud(c, el){
-  selectedCloud = c;
-  document.querySelectorAll('.cloud').forEach(e=>e.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function pay(){
-  customerName = document.getElementById('name').value.trim();
-  if(!customerName){alert('اكتب اسمك الأول يا زعيم ☁️');return}
-  if(!document.querySelector('.cloud.selected')){alert('اختار سحابة الأول');return}
-  
-  cloudNum = Math.floor(Math.random()*9000)+1000;
-  let msg = encodeURIComponent('السلام عليكم، حولت 10ج سحابة باسم '+customerName+' رقم السحابة #SC-'+cloudNum);
-  
-  // الرقم بتاعك 01282175854
-  window.open('https://wa.me/201282175854?text='+msg, '_blank');
-  
-  paid = true;
-  document.getElementById('payBtn').style.display = 'none';
-  document.getElementById('downloadBtn').style.display = 'block';
-  alert('تمام! بعد ما تبعت السكرين واتساب ارجع دوس "نزل شهادتك"');
+function nextScene(){
+  if(step < scenes.length){
+    if(scenes[step].img){
+      document.getElementById('bg').style.backgroundImage = `url(${scenes[step].img})`;
+    } else {
+      scenes[3].text = 'مبروك يا ' + playerName + '! بقيت رسمياً مالك القصر السماوي';
+      document.getElementById('scene').style.display='none';
+      document.getElementById('certificate').style.display='block';
+      document.getElementById('num').innerText = palaceNum;
+      document.getElementById('nameShow').innerText = playerName;
+      document.getElementById('date').innerText = new Date().toLocaleDateString('ar-EG');
+      document.getElementById('dingSound').play();
+      return;
+    }
+    document.getElementById('txt').innerText = scenes[step].text;
+    step++;
+    setTimeout(nextScene, 3500);
+  }
 }
 
 function download(){
-  if(!paid){
-    alert('لازم تدفع الأول يا صاحبي 😂');
-    return;
-  }
-  
-  document.getElementById('nameShow').innerText = customerName;
-  document.getElementById('cloudShow').innerText = selectedCloud;
-  document.getElementById('num').innerText = cloudNum;
-  document.getElementById('date').innerText = new Date().toLocaleDateString('ar-EG');
-  document.getElementById('certificate').style.display = 'block';
-  
-  setTimeout(()=>{
-    document.getElementById('dingSound').play().catch(()=>{});
-    html2canvas(document.getElementById('certificate'), {scale:2, useCORS:true}).then(canvas=>{
-      let link = document.createElement('a');
-      link.download = 'سحابتي-'+customerName+'.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  },800);
+  html2canvas(document.getElementById('certificate'), {scale:2}).then(canvas=>{
+    let link = document.createElement('a');
+    link.download = 'شهادة_قصري_'+playerName+'.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
 }
 </script>
 </body>
