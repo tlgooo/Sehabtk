@@ -3,113 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ادخل قصرك في السما</title>
+<title>جولة في السما الأولى</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-body{margin:0;font-family:tahoma;background:#000;overflow:hidden}
-#gate{position:fixed;width:100%;height:100%;background:radial-gradient(circle, #1a1a2e, #000);display:flex;flex-direction:column;justify-content:center;align-items:center}
-.door{width:180px;height:320px;margin:15px;cursor:pointer;transition:0.8s;position:relative;display:inline-block}
-.door img{width:100%;height:100%;border-radius:100px 100px 10px 10px;box-shadow:0 0 30px gold}
-.door:hover{transform:scale(1.1) translateY(-10px)}
-.door.open{transform:rotateY(-70deg);transform-origin:left}
-input{padding:12px;font-size:18px;border-radius:10px;border:2px solid gold;text-align:center;margin:20px;width:250px;background:rgba(0,0,0,0.5);color:gold}
-#scene{display:none;width:100%;height:100vh;position:relative}
-.scene-bg{width:100%;height:100%;background-size:cover;background-position:center;transition:2s}
-.text{position:absolute;top:60%;left:50%;transform:translate(-50%,-50%);color:white;font-size:26px;text-shadow:3px 3px 15px black;text-align:center;background:rgba(0,0,0,0.4);padding:20px;border-radius:15px}
-#certificate{display:none;padding:40px;text-align:center;background:linear-gradient(135deg,#fff,#f0e68c);color:black;border-radius:20px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 40px gold;max-width:500px}
-button{background:linear-gradient(gold,orange);border:none;padding:15px 35px;font-size:18px;border-radius:12px;cursor:pointer;font-weight:bold;margin-top:20px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal', sans-serif;background:#87CEEB;overflow:hidden}
+
+.sky{width:100%;height:100vh;position:relative;background:linear-gradient(180deg,#87CEEB 0%,#E0F6FF 50%,#FFF 100%)}
+.cloud{position:absolute;width:150px;height:80px;background:white;border-radius:50px;opacity:0.8;animation:float 20s infinite}
+.cloud:before,.cloud:after{content:'';position:absolute;background:white;border-radius:50%}
+.cloud:before{width:80px;height:80px;top:-30px;left:20px}
+.cloud:after{width:100px;height:100px;top:-40px;right:20px}
+@keyframes float{0%,100%{transform:translateX(0)}50%{transform:translateX(100px)}}
+
+.message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#2c3e50;opacity:0;transition:1s}
+.message.show{opacity:1}
+.message h2{font-size:32px;margin-bottom:15px;font-weight:300}
+.message p{font-size:18px;color:#555}
+
+.river{position:absolute;bottom:0;width:100%;height:150px;background:linear-gradient(90deg,rgba(255,255,255,0.3),rgba(173,216,230,0.8),rgba(255,255,255,0.3));animation:wave 3s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.1)}}
+
+.angel{position:absolute;width:80px;height:120px;bottom:100px;left:50%;transform:translateX(-50%);opacity:0;transition:1s}
+.angel.show{opacity:1}
+.angel svg{width:100%;height:100%}
+
+.gate{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:200px;height:300px;background:linear-gradient(135deg,#fff,#f0f8ff);border-radius:100px 100px 20px 20px;box-shadow:0 0 40px rgba(173,216,230,0.8);border:3px solid #fff;transition:1s}
+.gate.open{transform:translate(-50%,-50%) scale(1)}
+
+.certificate{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:white;padding:40px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);text-align:center;min-width:350px;transition:0.8s}
+.certificate.show{transform:translate(-50%,-50%) scale(1)}
+.certificate h2{color:#2c3e50;font-weight:300;margin-bottom:20px}
+.certificate p{color:#666;margin:10px 0}
+button{background:#87CEEB;border:none;padding:12px 30px;border-radius:25px;color:white;font-size:16px;cursor:pointer;margin-top:20px;transition:0.3s}
+button:hover{background:#5eb3d6}
+
+input{padding:10px 20px;border:2px solid #ddd;border-radius:20px;font-size:16px;text-align:center;margin-bottom:20px;width:250px}
+.start-btn{background:#87CEEB;color:white;border:none;padding:12px 30px;border-radius:25px;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<audio id="openSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
-<audio id="bgSound" loop src="https://cdn.pixabay.com/audio/2022/03/24/audio_d1718a8f9e.mp3"></audio>
-<audio id="dingSound" src="https://cdn.pixabay.com/audio/2022/03/10/audio_d1718a8f9e.mp3"></audio>
+<audio id="windSound" loop src="https://cdn.pixabay.com/audio/2022/08/21/audio_12467e1b1e.mp3"></audio>
+<audio id="chime" src="https://cdn.pixabay.com/audio/2021/08/03/audio_9c3b1e9c8c.mp3"></audio>
 
-<div id="gate">
-  <h1 style="color:gold;font-size:32px;margin-bottom:20px">اختر بوابة قصرك السماوي</h1>
-  <input id="playerName" placeholder="اكتب اسم الملك/الملكة هنا">
-  <div>
-    <div class="door" onclick="openGate('gold')">
-      <img src="https://images.unsplash.com/photo-1518998053901-5348d3961a04?q=80&w=500" alt="باب دهبي">
-      <p style="color:gold;text-align:center;font-size:18px">الباب الذهبي</p>
-    </div>
-    <div class="door" onclick="openGate('silver')">
-      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=500" alt="باب سيلفر">
-      <p style="color:silver;text-align:center;font-size:18px">الباب الفضي</p>
-    </div>
+<div class="sky" id="sky">
+  <div class="cloud" style="top:10%;left:10%"></div>
+  <div class="cloud" style="top:20%;right:15%;animation-delay:5s"></div>
+  <div class="cloud" style="top:40%;left:30%;animation-delay:10s"></div>
+  
+  <div id="startScreen" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+    <h2 style="color:#2c3e50;font-weight:300;margin-bottom:20px">اكتب اسمك وابدأ الرحلة</h2>
+    <input id="playerName" placeholder="اسمك هنا">
+    <br>
+    <button class="start-btn" onclick="startJourney()">ابدأ</button>
   </div>
-</div>
 
-<div id="scene">
-  <div class="scene-bg" id="bg"></div>
-  <div class="text" id="txt">مرحباً في مملكتك...</div>
-</div>
+  <div class="message" id="msg1">
+    <h2>مرحباً بك في السما الأولى ☁️</h2>
+    <p>الهوا هنا نضيف... والقلب هادي</p>
+  </div>
 
-<div id="certificate">
-  <h2>👑 شهادة ملكية القصر السماوي 👑</h2>
-  <p style="font-size:20px">تشهد السماء أن القصر رقم <span id="num" style="color:#b8860b;font-weight:bold"></span></p>
-  <p style="font-size:24px">ملك للملك/الملكة: <span id="nameShow" style="color:#b8860b;font-weight:bold"></span></p>
-  <p style="font-size:16px;color:gray">تاريخ التتويج: <span id="date"></span></p>
-  <button onclick="download()">📜 نزل شهادة التتويج</button>
+  <div class="river" id="river" style="opacity:0;transition:1s"></div>
+  <div class="message" id="msg2">
+    <h2>نهر من نور</h2>
+    <p>مياهه بتغسل كل تعب الدنيا</p>
+  </div>
+
+  <div class="angel" id="angel">
+    <svg viewBox="0 0 100 150">
+      <circle cx="50" cy="30" r="20" fill="#FFD700"/>
+      <rect x="40" y="50" width="20" height="50" fill="white" rx="10"/>
+      <path d="M20 60 Q10 40 20 30" fill="white" opacity="0.7"/>
+      <path d="M80 60 Q90 40 80 30" fill="white" opacity="0.7"/>
+    </svg>
+  </div>
+  <div class="message" id="msg3">
+    <h2>الملاك يبتسم لك</h2>
+    <p>تفضل... مفتاح قصرك السماوي</p>
+  </div>
+
+  <div class="gate" id="gate"></div>
+  <div class="message" id="msg4">
+    <h2>بوابة قصرك اتفتحت ✨</h2>
+    <p>مبروك يا <span id="nameInMsg"></span></p>
+  </div>
+
+  <div class="certificate" id="cert">
+    <h2>شهادة ملكية السما الأولى</h2>
+    <p>تشهد السماء أن</p>
+    <p style="font-size:24px;color:#87CEEB;font-weight:bold" id="certName"></p>
+    <p>مالك قطعة من السما الأولى</p>
+    <p style="font-size:14px;color:#999">رقم: <span id="certNum"></span></p>
+    <p style="font-size:14px;color:#999">التاريخ: <span id="certDate"></span></p>
+    <button onclick="download()">تحميل الشهادة</button>
+  </div>
 </div>
 
 <script>
 let step = 0;
-let palaceNum = Math.floor(Math.random()*9000)+1000;
-let playerName = '';
+let name = '';
+let num = Math.floor(Math.random()*9000)+1000;
 
-const scenes = [
-  {img:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200', text:'أهلاً بيك في حدائق قصرك... انهار من نور بتجري حواليك ✨'},
-  {img:'https://images.unsplash.com/photo-1571896349842-33c89424b7d0?q=80&w=1200', text:'وهنا بهو القصر... اعمدة من كريستال وسقف مرصع بالنجوم 💎'},
-  {img:'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200', text:'دي اوضة العرش... كرسيك الذهبي مستنيك من آلاف السنين 👑'},
-  {img:'', text:'مبروك يا ' + playerName + '! بقيت رسمياً مالك القصر السماوي'}
-];
-
-function openGate(type){
-  playerName = document.getElementById('playerName').value.trim();
-  if(!playerName){
-    alert('اكتب اسمك الأول يا ملك 👑');
-    return;
-  }
-
-  document.querySelectorAll('.door').forEach(d=>d.classList.add('open'));
-  document.getElementById('openSound').play();
-  document.getElementById('bgSound').play();
-
-  setTimeout(()=>{
-    document.getElementById('gate').style.display='none';
-    document.getElementById('scene').style.display='block';
-    nextScene();
-  }, 1500);
+function startJourney(){
+  name = document.getElementById('playerName').value.trim();
+  if(!name){alert('اكتب اسمك الأول');return}
+  
+  document.getElementById('startScreen').style.display='none';
+  document.getElementById('windSound').play();
+  nextStep();
 }
 
-function nextScene(){
-  if(step < scenes.length){
-    if(scenes[step].img){
-      document.getElementById('bg').style.backgroundImage = `url(${scenes[step].img})`;
-    } else {
-      scenes[3].text = 'مبروك يا ' + playerName + '! بقيت رسمياً مالك القصر السماوي';
-      document.getElementById('scene').style.display='none';
-      document.getElementById('certificate').style.display='block';
-      document.getElementById('num').innerText = palaceNum;
-      document.getElementById('nameShow').innerText = playerName;
-      document.getElementById('date').innerText = new Date().toLocaleDateString('ar-EG');
-      document.getElementById('dingSound').play();
-      return;
+function nextStep(){
+  setTimeout(()=>{
+    if(step==0){
+      document.getElementById('msg1').classList.add('show');
+      step++; nextStep();
     }
-    document.getElementById('txt').innerText = scenes[step].text;
-    step++;
-    setTimeout(nextScene, 3500);
-  }
+    else if(step==1){
+      document.getElementById('msg1').classList.remove('show');
+      document.getElementById('river').style.opacity='1';
+      document.getElementById('msg2').classList.add('show');
+      step++; nextStep();
+    }
+    else if(step==2){
+      document.getElementById('msg2').classList.remove('show');
+      document.getElementById('angel').classList.add('show');
+      document.getElementById('chime').play();
+      document.getElementById('msg3').classList.add('show');
+      step++; nextStep();
+    }
+    else if(step==3){
+      document.getElementById('msg3').classList.remove('show');
+      document.getElementById('gate').classList.add('open');
+      document.getElementById('nameInMsg').innerText = name;
+      document.getElementById('msg4').classList.add('show');
+      step++; nextStep();
+    }
+    else if(step==4){
+      setTimeout(()=>{
+        document.getElementById('msg4').classList.remove('show');
+        document.getElementById('cert').classList.add('show');
+        document.getElementById('certName').innerText = name;
+        document.getElementById('certNum').innerText = num;
+        document.getElementById('certDate').innerText = new Date().toLocaleDateString('ar-EG');
+        document.getElementById('chime').play();
+      }, 2000);
+    }
+  }, 3000);
 }
 
 function download(){
-  html2canvas(document.getElementById('certificate'), {scale:2}).then(canvas=>{
-    let link = document.createElement('a');
-    link.download = 'شهادة_قصري_'+playerName+'.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+  html2canvas(document.getElementById('cert'),{scale:2,background:'#fff'}).then(canvas=>{
+    let a = document.createElement('a');
+    a.download = 'شهادة_السما_'+name+'.png';
+    a.href = canvas.toDataURL();
+    a.click();
   });
 }
 </script>
